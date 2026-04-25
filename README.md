@@ -1,9 +1,6 @@
 # wayland-compositor
 
 A minimal, functional Wayland compositor with master-stack tiling, built on wlroots 0.17 in C++17.
-
-Repository: https://github.com/notcandy001/wayland-compositor
-
 ---
 
 ## Features
