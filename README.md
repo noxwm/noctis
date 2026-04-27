@@ -1,8 +1,5 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/noxwm/noxwm/main/docs/logo.png" width="180"/>
-
-# noxwm
 
 *A **Cxtremely** minimal tiling Wayland compositor.*
 
