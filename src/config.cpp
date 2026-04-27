@@ -4,7 +4,7 @@
 Config g_config;
 
 void Config::load_defaults() {
-    terminal     = "alacritty";
+    terminal     = "kitty";
     border_width = 2;
     gap          = 6;
     bg_color[0]  = 0.10f; bg_color[1]  = 0.10f;
