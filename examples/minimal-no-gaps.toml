@@ -1,0 +1,23 @@
+# noctis — minimal, no gaps, no borders
+# Copy to ~/.config/noctis/config.toml
+
+[general]
+terminal     = "kitty"
+gap          = 0
+master_ratio = 0.50
+border_width = 0
+
+[colors]
+background      = "#000000"
+active_border   = "#ffffff"
+inactive_border = "#000000"
+
+[autostart]
+apps = []
+
+[keybinds]
+"Super+Return"  = "exec:kitty"
+"Super+Q"       = "close"
+"Super+J"       = "focus_next"
+"Super+K"       = "focus_prev"
+"Super+Shift+Q" = "exit"

@@ -1,0 +1,23 @@
+# noctis — Nord theme
+# Copy to ~/.config/noctis/config.toml
+
+[general]
+terminal     = "kitty"
+gap          = 6
+master_ratio = 0.55
+border_width = 2
+
+[colors]
+background      = "#2E3440"
+active_border   = "#88C0D0"
+inactive_border = "#3B4252"
+
+[autostart]
+apps = []
+
+[keybinds]
+"Super+Return"  = "exec:kitty"
+"Super+Q"       = "close"
+"Super+J"       = "focus_next"
+"Super+K"       = "focus_prev"
+"Super+Shift+Q" = "exit"

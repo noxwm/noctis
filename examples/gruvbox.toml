@@ -1,0 +1,23 @@
+# noctis — Gruvbox Dark theme
+# Copy to ~/.config/noctis/config.toml
+
+[general]
+terminal     = "kitty"
+gap          = 6
+master_ratio = 0.60
+border_width = 3
+
+[colors]
+background      = "#282828"
+active_border   = "#D79921"
+inactive_border = "#504945"
+
+[autostart]
+apps = []
+
+[keybinds]
+"Super+Return"  = "exec:kitty"
+"Super+Q"       = "close"
+"Super+J"       = "focus_next"
+"Super+K"       = "focus_prev"
+"Super+Shift+Q" = "exit"
