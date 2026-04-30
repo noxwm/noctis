@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/noxwm/noctis/main/docs/logo.png" width="180"/>
 
 # noctis
 
@@ -8,23 +7,8 @@
 
 <br/>
 
-[![GitHub Stars](https://img.shields.io/github/stars/noxwm/noctis?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=252733&color=AB6C6A)](https://github.com/noxwm/noctis/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logoColor=D9E0EE&labelColor=252733&color=AB6C6A)](LICENSE)
-[![Built With](https://img.shields.io/badge/built%20with-wlroots%200.17-orange?style=for-the-badge&logoColor=D9E0EE&labelColor=252733&color=AB6C6A)](https://gitlab.freedesktop.org/wlroots/wlroots)
 
 </div>
-
----
-
-<div align="center">
-
-📸 Screenshots
-
-</div>
-
----
-
-> screenshots go here
 
 ---
 
