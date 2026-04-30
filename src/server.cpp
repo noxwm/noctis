@@ -187,7 +187,7 @@ static void _cursor_button(struct wl_listener *l, void *d) {
         reinterpret_cast<struct wlr_pointer_button_event *>(d);
     wlr_seat_pointer_notify_button(s->seat, e->time_msec, e->button, e->state);
 
-    if (e->state == WLR_BUTTON_PRESSED) {
+    if (e->state == WL_POINTER_BUTTON_STATE_PRESSED) {
         double sx, sy;
         struct wlr_surface *surface =
             desktop_surface_at(s, s->cursor->x, s->cursor->y, &sx, &sy);
@@ -212,7 +212,7 @@ static void _cursor_axis(struct wl_listener *l, void *d) {
     struct wlr_pointer_axis_event *e =
         reinterpret_cast<struct wlr_pointer_axis_event *>(d);
     wlr_seat_pointer_notify_axis(s->seat, e->time_msec, e->orientation,
-        e->delta, e->delta_discrete, e->source);
+        e->delta, e->delta_discrete, e->source, e->relative_direction);
 }
 
 static void _cursor_frame(struct wl_listener *l, void * /*d*/) {
@@ -232,8 +232,9 @@ bool Server::init() {
         return false;
     }
 
-    // Backend (autodetects DRM/libinput, Wayland nested, X11 nested)
-    backend = wlr_backend_autocreate(display, nullptr);
+    // wlroots 0.18: backend takes event_loop, not display
+    event_loop = wl_display_get_event_loop(display);
+    backend = wlr_backend_autocreate(event_loop, nullptr);
     if (!backend) {
         LOG_ERROR("Failed to create wlroots backend");
         return false;
@@ -258,7 +259,7 @@ bool Server::init() {
     wlr_data_device_manager_create(display);
 
     // Output layout + scene
-    output_layout = wlr_output_layout_create();
+    output_layout = wlr_output_layout_create(display);
     scene         = wlr_scene_create();
     scene_layout  = wlr_scene_attach_output_layout(scene, output_layout);
 

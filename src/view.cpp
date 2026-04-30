@@ -1,6 +1,7 @@
 #include "view.hpp"
 #include "server.hpp"
 #include "util.hpp"
+#include <algorithm>
 
 extern "C" {
 #include <wlr/types/wlr_xdg_shell.h>
@@ -58,7 +59,8 @@ static void view_handle_destroy(struct wl_listener *listener, void * /*data*/) {
     wl_list_remove(&view->request_fullscreen.link);
 
     auto &views = view->server->views;
-    views.erase(std::remove(views.begin(), views.end(), view), views.end());
+    auto it = std::find(views.begin(), views.end(), view);
+    if (it != views.end()) views.erase(it);
 
     delete view;
 }

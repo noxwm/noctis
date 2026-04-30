@@ -24,11 +24,11 @@ extern "C" {
 #include "keybinds.hpp"
 #include "config.hpp"
 
-struct Output;  // forward
+struct Output;
 
 struct Server {
-    // Core Wayland/wlroots objects
     struct wl_display          *display        = nullptr;
+    struct wl_event_loop       *event_loop     = nullptr;  // 0.18: backend takes event_loop
     struct wlr_backend         *backend        = nullptr;
     struct wlr_renderer        *renderer       = nullptr;
     struct wlr_allocator       *allocator      = nullptr;
@@ -37,36 +37,28 @@ struct Server {
     struct wlr_scene           *scene          = nullptr;
     struct wlr_scene_output_layout *scene_layout = nullptr;
 
-    // Shell
     struct wlr_xdg_shell       *xdg_shell      = nullptr;
-
-    // Input
     struct wlr_seat            *seat           = nullptr;
     struct wlr_cursor          *cursor         = nullptr;
     struct wlr_xcursor_manager *cursor_mgr     = nullptr;
 
-    // State
-    std::vector<View *>   views;       // all known toplevels
-    std::vector<Output *> outputs;     // all connected outputs
+    std::vector<View *>   views;
+    std::vector<Output *> outputs;
     View                 *focused_view = nullptr;
 
-    // Layout engine
     Layout         layout;
     KeybindManager keybinds;
 
-    // Backend listeners
     struct wl_listener new_output;
     struct wl_listener new_input;
     struct wl_listener new_xdg_toplevel;
 
-    // Cursor listeners
     struct wl_listener cursor_motion;
     struct wl_listener cursor_motion_absolute;
     struct wl_listener cursor_button;
     struct wl_listener cursor_axis;
     struct wl_listener cursor_frame;
 
-    // Seat listeners
     struct wl_listener request_cursor;
     struct wl_listener request_set_selection;
 
@@ -74,17 +66,10 @@ struct Server {
     void run();
     void destroy();
 
-    // Focus helpers
     void focus_view(View *view);
     void focus_next();
     void focus_prev();
-
-    // Layout trigger
     void apply_layout();
-
-    // Get usable area for tiling (from first output)
-    Box get_output_box();
-
-    // Spawn a process
+    Box  get_output_box();
     void spawn(const std::string &cmd);
 };

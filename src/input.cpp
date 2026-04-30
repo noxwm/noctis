@@ -137,7 +137,7 @@ static void server_cursor_button(struct wl_listener *listener, void *data) {
     wlr_seat_pointer_notify_button(server->seat, event->time_msec,
         event->button, event->state);
 
-    if (event->state == WLR_BUTTON_PRESSED) {
+    if (event->state == WL_POINTER_BUTTON_STATE_PRESSED) {
         // Focus the view under the cursor
         double sx, sy;
         struct wlr_surface *surface =
@@ -164,7 +164,8 @@ static void server_cursor_axis(struct wl_listener *listener, void *data) {
     struct wlr_pointer_axis_event *event =
         reinterpret_cast<struct wlr_pointer_axis_event *>(data);
     wlr_seat_pointer_notify_axis(server->seat, event->time_msec,
-        event->orientation, event->delta, event->delta_discrete, event->source);
+        event->orientation, event->delta, event->delta_discrete,
+        event->source, event->relative_direction);
 }
 
 static void server_cursor_frame(struct wl_listener *listener, void * /*data*/) {

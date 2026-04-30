@@ -1,6 +1,7 @@
 #include "output.hpp"
 #include "server.hpp"
 #include "util.hpp"
+#include <algorithm>
 
 extern "C" {
 #include <wlr/types/wlr_output.h>
@@ -44,7 +45,8 @@ static void output_handle_destroy(struct wl_listener *listener, void * /*data*/)
 
     Server *server = output->server;
     auto &outs = server->outputs;
-    outs.erase(std::remove(outs.begin(), outs.end(), output), outs.end());
+    auto it = std::find(outs.begin(), outs.end(), output);
+    if (it != outs.end()) outs.erase(it);
 
     delete output;
 }
