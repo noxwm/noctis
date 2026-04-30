@@ -1,5 +1,6 @@
 #include "keybinds.hpp"
 #include "server.hpp"
+#include "config.hpp"
 #include "util.hpp"
 
 extern "C" {
@@ -25,42 +26,52 @@ bool KeybindManager::handle_key(Server *server, uint32_t modifiers,
     return false;
 }
 
-// ── default bindings ───────────────────────────────────────────────────────
-//
-//  MOD = WLR_MODIFIER_LOGO (Super)
-//
-//  MOD+Return  → launch terminal
-//  MOD+Q       → close focused window
-//  MOD+J       → focus next
-//  MOD+K       → focus prev
-//  MOD+Shift+Q → exit compositor
+// ── setup_defaults ─────────────────────────────────────────────────────────
+// Builds the runtime keybind table from g_config.keybinds.
+// Each KeybindEntry action string is dispatched here.
 
 void KeybindManager::setup_defaults(Server *server) {
-    const uint32_t MOD  = WLR_MODIFIER_LOGO;
-    const uint32_t MODS = WLR_MODIFIER_LOGO | WLR_MODIFIER_SHIFT;
+    (void)server;
 
-    add(MOD, XKB_KEY_Return, [](Server *s) {
-        s->spawn(g_config.terminal);
-    });
+    for (auto &entry : g_config.keybinds) {
+        const std::string action = entry.action;
+        uint32_t     mods = entry.modifiers;
+        xkb_keysym_t sym  = entry.sym;
 
-    add(MOD, XKB_KEY_q, [](Server *s) {
-        if (s->focused_view) {
-            wlr_xdg_toplevel_send_close(s->focused_view->toplevel);
+        if (action.rfind("exec:", 0) == 0) {
+            // exec:some command
+            std::string cmd = action.substr(5);
+            add(mods, sym, [cmd](Server *s) {
+                s->spawn(cmd);
+            });
+
+        } else if (action == "close") {
+            add(mods, sym, [](Server *s) {
+                if (s->focused_view)
+                    wlr_xdg_toplevel_send_close(s->focused_view->toplevel);
+            });
+
+        } else if (action == "focus_next") {
+            add(mods, sym, [](Server *s) { s->focus_next(); });
+
+        } else if (action == "focus_prev") {
+            add(mods, sym, [](Server *s) { s->focus_prev(); });
+
+        } else if (action == "exit") {
+            add(mods, sym, [](Server *s) {
+                LOG_INFO("Exiting noctis");
+                wl_display_terminate(s->display);
+            });
+
+        } else {
+            // Unknown action — we already validated at parse time,
+            // but guard here too.
+            fprintf(stderr,
+                "[noctis] ERROR: unknown keybind action \"%s\"\n",
+                action.c_str());
+            exit(1);
         }
-    });
+    }
 
-    add(MOD, XKB_KEY_j, [](Server *s) {
-        s->focus_next();
-    });
-
-    add(MOD, XKB_KEY_k, [](Server *s) {
-        s->focus_prev();
-    });
-
-    add(MODS, XKB_KEY_Q, [](Server *s) {
-        LOG_INFO("Exiting compositor");
-        wl_display_terminate(s->display);
-    });
-
-    (void)server; // reserved for future per-server init
+    LOG_INFO("Registered %zu keybinds", binds_.size());
 }

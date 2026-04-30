@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --fix-missing \
+            cmake \
+            pkg-config \
+            libwlroots-dev \
+            libwayland-dev \
+            wayland-protocols \
+            libxkbcommon-dev \
+            libinput-dev \
+            libpixman-1-dev \
+            wayland-scanner
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Verify binary
+        run: |
+          file build/compositor
+          ldd  build/compositor | grep -E "wlroots|wayland|xkb"

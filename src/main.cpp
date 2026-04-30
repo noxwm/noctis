@@ -1,19 +1,16 @@
-#include “server.hpp”
-#include “util.hpp”
+#include "server.hpp"
+#include "util.hpp"
 
 int main(int /*argc*/, char * /*argv*/[]) {
-Server server;
+    Server server;
 
-```
-if (!server.init()) {
-    LOG_ERROR("Server initialization failed");
-    return 1;
-}
+    if (!server.init()) {
+        LOG_ERROR("Server initialization failed");
+        return 1;
+    }
 
-server.run();
-server.destroy();
+    server.run();
+    server.destroy();
 
-return 0;
-```
-
+    return 0;
 }

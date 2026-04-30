@@ -1,34 +1,50 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <xkbcommon/xkbcommon.h>
 
+struct AutostartEntry {
+    std::string cmd;
+};
+
+struct KeybindEntry {
+    uint32_t     modifiers;
+    xkb_keysym_t sym;
+    std::string  action; // "exec:cmd", "close", "focus_next", "focus_prev", "exit"
+};
+
 struct Config {
-    // Modifier key (default: Super/Logo)
-    uint32_t mod_key = 0; // filled at runtime from xkb
+    // [general]
+    std::string terminal     = "kitty";
+    int         gap          = 6;
+    float       master_ratio = 0.55f;
+    int         border_width = 2;
 
-    // Terminal to launch
-    std::string terminal = "kitty";
+    // [colors] RGBA float[4]
+    float bg_color[4]        = {0.10f, 0.10f, 0.15f, 1.0f};
+    float active_border[4]   = {0.67f, 0.42f, 0.42f, 1.0f};
+    float inactive_border[4] = {0.20f, 0.20f, 0.20f, 1.0f};
 
-    // Border width (px)
-    int border_width = 2;
+    // [autostart]
+    std::vector<AutostartEntry> autostart;
 
-    // Gap between windows (px)
-    int gap = 6;
+    // [keybinds]
+    std::vector<KeybindEntry> keybinds;
 
-    // Background color RGBA
-    float bg_color[4] = {0.1f, 0.1f, 0.15f, 1.0f};
-
-    // Active border color RGBA
-    float active_border[4] = {0.3f, 0.6f, 1.0f, 1.0f};
-
-    // Inactive border color RGBA
-    float inactive_border[4] = {0.3f, 0.3f, 0.3f, 1.0f};
-
-    // Master ratio for tiling
-    float master_ratio = 0.55f;
-
+    // Load defaults then overlay with ~/.config/noctis/config.toml
+    // Prints error + exits on bad values.
+    // Silent fallback to defaults if file missing.
+    void load();
     void load_defaults();
+
+private:
+    static void parse_hex_color(const std::string &hex,
+                                float out[4],
+                                const std::string &key_name);
+
+    static KeybindEntry parse_keybind(const std::string &combo,
+                                      const std::string &action);
 };
 
 extern Config g_config;

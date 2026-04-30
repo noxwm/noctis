@@ -2,37 +2,66 @@
 
 The modifier key is **Super** (Win/Logo key).
 
+## Defaults
+
 | Keybind | Action |
 |---|---|
-| `Super + Enter` | Launch terminal (`alacritty` by default) |
+| `Super + Enter` | Launch kitty |
 | `Super + Q` | Close focused window |
 | `Super + J` | Focus next window |
 | `Super + K` | Focus previous window |
 | `Super + Shift + Q` | Exit compositor |
 
-## Changing the Terminal
-
-Edit `src/config.cpp` and change the `terminal` field:
-
-```cpp
-terminal = "foot";   // or kitty, wezterm, etc.
-```
-
 ## Adding Keybinds
 
-In `src/keybinds.cpp`, inside `KeybindManager::setup_defaults()`:
+In `~/.config/noctis/config.toml`:
 
-```cpp
-add(MOD, XKB_KEY_b, [](Server *s) {
-    s->spawn("firefox");
-});
+```toml
+[keybinds]
+"Super+Return"  = "exec:kitty"
+"Super+B"       = "exec:firefox"
+"Super+Shift+F" = "exec:thunar"
+"Super+L"       = "exec:swaylock"
+"Super+Q"       = "close"
+"Super+J"       = "focus_next"
+"Super+K"       = "focus_prev"
+"Super+Shift+Q" = "exit"
 ```
 
-`MOD` is `WLR_MODIFIER_LOGO`. Combine modifiers with `|`:
+## Supported Modifiers
 
-```cpp
-const uint32_t MOD_SHIFT = WLR_MODIFIER_LOGO | WLR_MODIFIER_SHIFT;
-add(MOD_SHIFT, XKB_KEY_e, [](Server *s) {
-    s->spawn("thunar");
-});
-```
+| Config name | Key |
+|---|---|
+| `Super` | Win / Logo key |
+| `Shift` | Shift |
+| `Ctrl` | Control |
+| `Alt` | Alt |
+
+## Supported Actions
+
+| Action | Description |
+|---|---|
+| `exec:<cmd>` | Run a command |
+| `close` | Close focused window |
+| `focus_next` | Focus next window |
+| `focus_prev` | Focus previous window |
+| `exit` | Exit the compositor |
+
+## Key Names
+
+Key names follow the XKB keysym standard. Common ones:
+
+| Key | Name |
+|---|---|
+| Enter | `Return` |
+| Space | `space` |
+| a–z | `a`–`z` |
+| A–Z | `A`–`Z` |
+| 0–9 | `0`–`9` |
+| F1–F12 | `F1`–`F12` |
+| Arrow keys | `Left` `Right` `Up` `Down` |
+| Backspace | `BackSpace` |
+| Escape | `Escape` |
+| Tab | `Tab` |
+
+Full list at `/usr/include/xkbcommon/xkbcommon-keysyms.h`
