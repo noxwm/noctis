@@ -10,7 +10,6 @@
 
 </div>
 
----
 
 ## ⚡ Install (Arch Linux)
 
@@ -26,8 +25,6 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ./build/noctis
 ```
-
----
 
 ## 🎨 Configuration
 
@@ -63,8 +60,6 @@ apps = ["waybar", "dunst"]
 "Super+Shift+Q" = "exit"
 ```
 
----
-
 ## 🖼 Themes
 
 Ready-made themes are in the `examples/` folder:
@@ -83,7 +78,6 @@ Apply one:
 cp examples/catppuccin-mocha.toml ~/.config/noctis/config.toml
 ```
 
----
 
 ## ⌨️ Keybindings
 
@@ -97,7 +91,6 @@ cp examples/catppuccin-mocha.toml ~/.config/noctis/config.toml
 
 See [`docs/keybindings.md`](docs/keybindings.md) for full reference.
 
----
 
 ## 🗂 Structure
 
@@ -110,16 +103,7 @@ scripts/      → build helpers
 docs/         → keybindings reference
 ```
 
----
-
 ## 🔗 Related
 
 - [noctctl](https://github.com/noxwm/noctctl) — IPC client for noctis
 
----
-
-<div align="center">
-
-made with 🖤 on Arch Linux
-
-</div>
