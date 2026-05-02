@@ -1,0 +1,31 @@
+# noctis config — ~/.config/noctis/config.nox
+# Changes apply on next compositor start.
+
+general {
+    terminal     = kitty
+    gap          = 6
+    master_ratio = 0.55
+    border_width = 2
+    wallpaper    = ~/.config/noctis/wallpaper.jpg
+}
+
+colors {
+    background      = #1a1a26
+    active_border   = #AB6C6A
+    inactive_border = #333333
+}
+
+autostart {
+    # exec = waybar
+    # exec = dunst
+}
+
+# Keybinds — format: bind = MODS, Key, action[, args]
+bind = SUPER, Return, exec, kitty
+bind = SUPER, Q, close
+bind = SUPER, J, focus_next
+bind = SUPER, K, focus_prev
+bind = SUPER SHIFT, Q, exit
+# bind = SUPER, B, exec, firefox
+# bind = SUPER SHIFT, F, exec, thunar
+# bind = SUPER, L, exec, swaylock

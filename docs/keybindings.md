@@ -1,67 +1,34 @@
-# Keybindings
+# noctis keybindings
 
-The modifier key is **Super** (Win/Logo key).
+Keybinds are defined in `~/.config/noctis/config.nox`.
 
-## Defaults
+## Format
 
-| Keybind | Action |
-|---|---|
-| `Super + Enter` | Launch kitty |
-| `Super + Q` | Close focused window |
-| `Super + J` | Focus next window |
-| `Super + K` | Focus previous window |
-| `Super + Shift + Q` | Exit compositor |
-
-## Adding Keybinds
-
-In `~/.config/noctis/config.toml`:
-
-```toml
-[keybinds]
-"Super+Return"  = "exec:kitty"
-"Super+B"       = "exec:firefox"
-"Super+Shift+F" = "exec:thunar"
-"Super+L"       = "exec:swaylock"
-"Super+Q"       = "close"
-"Super+J"       = "focus_next"
-"Super+K"       = "focus_prev"
-"Super+Shift+Q" = "exit"
+```
+bind = MODS, Key, action[, args]
 ```
 
-## Supported Modifiers
+Modifiers: `SUPER`, `SHIFT`, `CTRL`, `ALT` — space separated for combos.
 
-| Config name | Key |
-|---|---|
-| `Super` | Win / Logo key |
-| `Shift` | Shift |
-| `Ctrl` | Control |
-| `Alt` | Alt |
+## Actions
 
-## Supported Actions
+| Action       | Description                  |
+|--------------|------------------------------|
+| `exec, cmd`  | Run a command                |
+| `close`      | Close focused window         |
+| `focus_next` | Focus next window            |
+| `focus_prev` | Focus previous window        |
+| `exit`       | Exit the compositor          |
 
-| Action | Description |
-|---|---|
-| `exec:<cmd>` | Run a command |
-| `close` | Close focused window |
-| `focus_next` | Focus next window |
-| `focus_prev` | Focus previous window |
-| `exit` | Exit the compositor |
+## Examples
 
-## Key Names
-
-Key names follow the XKB keysym standard. Common ones:
-
-| Key | Name |
-|---|---|
-| Enter | `Return` |
-| Space | `space` |
-| a–z | `a`–`z` |
-| A–Z | `A`–`Z` |
-| 0–9 | `0`–`9` |
-| F1–F12 | `F1`–`F12` |
-| Arrow keys | `Left` `Right` `Up` `Down` |
-| Backspace | `BackSpace` |
-| Escape | `Escape` |
-| Tab | `Tab` |
-
-Full list at `/usr/include/xkbcommon/xkbcommon-keysyms.h`
+```
+bind = SUPER, Return, exec, kitty
+bind = SUPER, B, exec, firefox
+bind = SUPER SHIFT, F, exec, thunar
+bind = SUPER, Q, close
+bind = SUPER, J, focus_next
+bind = SUPER, K, focus_prev
+bind = SUPER SHIFT, Q, exit
+bind = SUPER, L, exec, swaylock
+```
