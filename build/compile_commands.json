@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/user0/noctis/build",
+  "command": "/usr/bin/cc -DWLR_018 -DWLR_USE_UNSTABLE -I/usr/include/wlroots-0.18 -I/home/user0/noctis/protocols -I/usr/include/pixman-1 -I/usr/include/libdrm -O3 -DNDEBUG -std=gnu11 -o CMakeFiles/noctis.dir/src/noctis.c.o -c /home/user0/noctis/src/noctis.c",
+  "file": "/home/user0/noctis/src/noctis.c",
+  "output": "CMakeFiles/noctis.dir/src/noctis.c.o"
+},
+{
+  "directory": "/home/user0/noctis/build",
+  "command": "/usr/bin/cc -DWLR_018 -DWLR_USE_UNSTABLE -I/usr/include/wlroots-0.18 -I/home/user0/noctis/protocols -I/usr/include/pixman-1 -I/usr/include/libdrm -O3 -DNDEBUG -std=gnu11 -o CMakeFiles/noctis.dir/protocols/xdg-shell-protocol.c.o -c /home/user0/noctis/protocols/xdg-shell-protocol.c",
+  "file": "/home/user0/noctis/protocols/xdg-shell-protocol.c",
+  "output": "CMakeFiles/noctis.dir/protocols/xdg-shell-protocol.c.o"
+}
+]

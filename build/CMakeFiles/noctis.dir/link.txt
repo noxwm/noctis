@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/noctis.dir/link.d CMakeFiles/noctis.dir/src/noctis.c.o "CMakeFiles/noctis.dir/protocols/xdg-shell-protocol.c.o" -o noctis  -lwlroots-0.18 -lwayland-server -lm -lxkbcommon -lpixman-1
