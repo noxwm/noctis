@@ -1,86 +1,122 @@
-# noctis
+# noxwm
 
-Minimal tiling Wayland compositor. Clean, fast, no bloat.
+A Wayland compositor with niri-style scrollable column tiling and Hyprland-style workspaces.
 
-## Features
+Built with C++23 and wlroots.
 
-- Master-stack tiling layout
-- `.nox` config format — no quotes, no brackets, just clean `key = value`
-- Wallpaper via `swww`
-- Autostart support
-- Custom keybinds
+## Architecture
 
-## Dependencies
-
-Arch:
-```bash
-pacman -S wlroots wayland wayland-protocols libxkbcommon pixman swww
+```
+src/
+  main.cpp                 — entry point
+  core/
+    server.cpp             — compositor core, event loop, wlroots wiring
+    output.cpp             — display output handling (DRM/KMS)
+    xdg_shell.cpp          — reserved for future protocol extensions
+  input/
+    keyboard.cpp           — keyboard input + keybind dispatch
+    cursor.cpp             — reserved for cursor theme work
+  layout/
+    column_layout.cpp      — niri-style scrollable column tiling engine
+    workspace.cpp          — workspace management
+  config/
+    parser.cpp             — .nox config lexer + parser
+    config.cpp             — config loader
 ```
 
-## Build
+## Building
+
+### Dependencies
+
+- wlroots >= 0.18
+- wayland-server
+- xkbcommon
+- pixman
+- libinput
+- meson + ninja
 
 ```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --parallel
+# Arch Linux
+sudo pacman -S wlroots wayland xkbcommon pixman libinput meson ninja
+
+# Ubuntu/Debian
+sudo apt install libwlroots-dev libwayland-dev libxkbcommon-dev \
+                 libpixman-1-dev libinput-dev meson ninja-build
 ```
 
-## Setup
+### Compile
 
 ```bash
-mkdir -p ~/.config/noctis
-cp config/config.nox ~/.config/noctis/
-cp config/wallpaper.jpg ~/.config/noctis/
-./build/noctis
+meson setup build
+ninja -C build
 ```
 
-## Config — `~/.config/noctis/config.nox`
+### Run
+
+```bash
+# From a TTY (will launch on DRM/KMS)
+./build/noxwm
+
+# From inside an existing Wayland session (for testing)
+./build/noxwm  # wlroots auto-detects and uses a nested backend
+```
+
+## Config
+
+Copy the example config:
+
+```bash
+mkdir -p ~/.config/noxwm
+cp config.nox.example ~/.config/noxwm/config.nox
+```
+
+Edit `~/.config/noxwm/config.nox`:
 
 ```
 general {
-    terminal     = kitty
-    gap          = 6
-    master_ratio = 0.55
+    gaps = 8
     border_width = 2
-    wallpaper    = ~/.config/noctis/wallpaper.jpg
+    border_color = #cba6f7
+    border_color_inactive = #313244
 }
 
-colors {
-    background      = #1a1a26
-    active_border   = #AB6C6A
-    inactive_border = #333333
+keybinds {
+    Super+Return = exec kitty
+    Super+Q = close
+    Super+H = focus left
+    Super+L = focus right
+    Super+1 = workspace 1
 }
 
 autostart {
-    exec = waybar
-    exec = dunst
+    exec waybar
 }
-
-bind = SUPER, Return, exec, kitty
-bind = SUPER, Q, close
-bind = SUPER, J, focus_next
-bind = SUPER, K, focus_prev
-bind = SUPER SHIFT, Q, exit
 ```
 
-## Default Keybinds
+## Layout model
 
-| Keys              | Action          |
-|-------------------|-----------------|
-| Super + Return    | Launch terminal |
-| Super + Q         | Close window    |
-| Super + J         | Focus next      |
-| Super + K         | Focus prev      |
-| Super + Shift + Q | Exit            |
+Each workspace uses a scrollable column layout:
 
-## Themes
-
-See `examples/` — copy any `.nox` file to `~/.config/noctis/config.nox`.
-
-## TTY / Seat permissions
-
-```bash
-pacman -S seatd
-systemctl enable --now seatd
-usermod -aG seat $USER
-# re-login then run noctis
 ```
+Workspace 1:  [ terminal ] [ browser ] [ editor ] →  scroll with Super+H/L
+Workspace 2:  [ discord ]  [ spotify ]
+```
+
+- Every new window opens in its own column
+- Windows in the same column stack vertically
+- Columns scroll horizontally, keeping the focused column visible
+- Switch workspaces with Super+1 through Super+9
+
+## v1 scope
+
+- [x] Tiling (scrollable columns)
+- [x] Named workspaces (9 total)
+- [x] Focus with keyboard (Super+H/L) and mouse click
+- [x] .nox config parser
+- [x] Keybind dispatch
+- [x] Autostart programs
+- [x] Close window / fullscreen
+- [ ] Border rendering (v1.1)
+- [ ] Multi-monitor (v2)
+- [ ] XWayland (v2)
+- [ ] Animations (v2)
