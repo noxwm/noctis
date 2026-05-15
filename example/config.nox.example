@@ -1,0 +1,28 @@
+general {
+    gaps = 8
+    border_width = 2
+    border_color = #cba6f7
+    border_color_inactive = #313244
+}
+
+keybinds {
+    Super+Return = exec kitty
+    Super+Q = close
+    Super+H = focus left
+    Super+L = focus right
+    Super+Shift+E = quit
+
+    Super+1 = workspace 1
+    Super+2 = workspace 2
+    Super+3 = workspace 3
+    Super+4 = workspace 4
+    Super+5 = workspace 5
+    Super+6 = workspace 6
+    Super+7 = workspace 7
+    Super+8 = workspace 8
+    Super+9 = workspace 9
+}
+
+autostart {
+    exec waybar
+}
