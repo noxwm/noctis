@@ -51,6 +51,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-notcandy001
+@notcandy001
 
-Project Link: [https://github.com/username/noctis](https://github.com/username/noctis)
