@@ -1,0 +1,29 @@
+[package]
+name    = "noxwm"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "noxwm"
+path = "src/main.rs"
+
+[dependencies]
+smithay = { version = "0.7", default-features = false, features = [
+    "backend_winit",
+    "backend_libinput",
+    "renderer_gl",
+    "wayland_frontend",
+    "desktop",
+] }
+
+wayland-server   = "0.31"
+wayland-backend  = { version = "0.3", features = ["server_system"] }
+
+tracing            = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+calloop            = "0.14"
+calloop-wayland-source = "0.3"
+
+[profile.release]
+opt-level = 3
+lto       = true

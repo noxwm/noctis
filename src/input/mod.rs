@@ -1,12 +1,10 @@
 use smithay::input::keyboard::ModifiersState;
 use crate::config::{Action, Keybind, Modifiers};
 
-/// Match a key event against configured keybinds.
-/// Returns the action if a keybind matched.
 pub fn match_keybind<'a>(
-    keybinds:  &'a [Keybind],
-    key_name:  &str,
-    mods:      &ModifiersState,
+    keybinds: &'a [Keybind],
+    key_name: &str,
+    mods:     &ModifiersState,
 ) -> Option<&'a Action> {
     let pressed = Modifiers {
         super_key: mods.logo,

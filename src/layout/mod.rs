@@ -1,9 +1,5 @@
 use smithay::utils::{Logical, Rectangle, Size};
 
-// ── Window ────────────────────────────────────────────────────────────────────
-
-/// A window tracked by the layout engine.
-/// The actual smithay window handle lives in core; this is just the geometry.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct WindowId(pub usize);
 
@@ -13,35 +9,23 @@ pub struct WindowGeom {
     pub rect: Rectangle<i32, Logical>,
 }
 
-// ── Column ────────────────────────────────────────────────────────────────────
-
 #[derive(Debug, Default, Clone)]
-struct Column {
-    windows: Vec<WindowId>,
+pub struct Column {
+    pub windows: Vec<WindowId>,
 }
 
-// ── ColumnLayout ──────────────────────────────────────────────────────────────
-
-/// niri-style: windows live in columns, columns scroll horizontally.
-/// Each new window gets its own column by default.
 #[derive(Debug)]
 pub struct ColumnLayout {
-    screen:      Size<i32, Logical>,
-    gaps:        i32,
-    columns:     Vec<Column>,
-    focused_col: usize,
-    scroll_x:    i32,
+    screen:          Size<i32, Logical>,
+    gaps:            i32,
+    pub columns:     Vec<Column>,
+    pub focused_col: usize,
+    scroll_x:        i32,
 }
 
 impl ColumnLayout {
     pub fn new(screen: Size<i32, Logical>, gaps: i32) -> Self {
-        ColumnLayout {
-            screen,
-            gaps,
-            columns:     vec![],
-            focused_col: 0,
-            scroll_x:    0,
-        }
+        ColumnLayout { screen, gaps, columns: vec![], focused_col: 0, scroll_x: 0 }
     }
 
     pub fn update_screen(&mut self, screen: Size<i32, Logical>) {
@@ -77,20 +61,28 @@ impl ColumnLayout {
         self.scroll_to_focused();
     }
 
+    pub fn set_focused_by_id(&mut self, id: WindowId) {
+        for (ci, col) in self.columns.iter().enumerate() {
+            if col.windows.contains(&id) {
+                self.focused_col = ci;
+                self.scroll_to_focused();
+                return;
+            }
+        }
+    }
+
     pub fn focused_window(&self) -> Option<WindowId> {
         self.columns.get(self.focused_col)?.windows.first().copied()
     }
 
-    /// Compute geometry for every window. Returns (WindowId, Rectangle).
     pub fn arrange(&self) -> Vec<WindowGeom> {
         if self.columns.is_empty() || self.screen.w == 0 { return vec![]; }
 
-        let n      = self.columns.len() as i32;
-        let gaps   = self.gaps;
-        let col_w  = ((self.screen.w - gaps * (n + 1)) / n).max(100);
-
+        let n     = self.columns.len() as i32;
+        let gaps  = self.gaps;
+        let col_w = ((self.screen.w - gaps * (n + 1)) / n).max(100);
         let mut result = Vec::new();
-        let mut x      = gaps;
+        let mut x = gaps;
 
         for col in &self.columns {
             let nv    = col.windows.len() as i32;
@@ -100,31 +92,25 @@ impl ColumnLayout {
             for &wid in &col.windows {
                 result.push(WindowGeom {
                     id:   wid,
-                    rect: Rectangle::from_loc_and_size(
-                        (x - self.scroll_x, y),
-                        (col_w, row_h),
+                    rect: Rectangle::new(
+                        (x - self.scroll_x, y).into(),
+                        (col_w, row_h).into(),
                     ),
                 });
                 y += row_h + gaps;
             }
-
             x += col_w + gaps;
         }
-
         result
     }
 
     fn scroll_to_focused(&mut self) {
         if self.columns.is_empty() || self.screen.w == 0 { return; }
-
         let n     = self.columns.len() as i32;
         let gaps  = self.gaps;
         let col_w = ((self.screen.w - gaps * (n + 1)) / n).max(100);
-
-        // Absolute x of focused column
         let col_abs_x = gaps + self.focused_col as i32 * (col_w + gaps);
         let col_right = col_abs_x + col_w;
-
         if col_abs_x - self.scroll_x < gaps {
             self.scroll_x = col_abs_x - gaps;
         } else if col_right - self.scroll_x > self.screen.w - gaps {
@@ -132,8 +118,6 @@ impl ColumnLayout {
         }
     }
 }
-
-// ── Workspace ─────────────────────────────────────────────────────────────────
 
 pub struct Workspace {
     pub id:     usize,
