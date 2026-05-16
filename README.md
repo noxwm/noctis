@@ -1,122 +1,56 @@
-# noxwm
+# noctis
 
-A Wayland compositor with niri-style scrollable column tiling and Hyprland-style workspaces.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-Built with C++23 and wlroots.
+## Description
 
-## Architecture
+A minimal, independent Wayland compositor written in Rust. Built from scratch using Smithay, Noctis features a scrollable column tiling layout, dynamic workspaces, and a clean human-readable configuration format. No wlroots, no bloat, no compromises just a fast, hackable compositor with a codebase small enough to fully understand in an afternoon.
 
-```
-src/
-  main.cpp                 — entry point
-  core/
-    server.cpp             — compositor core, event loop, wlroots wiring
-    output.cpp             — display output handling (DRM/KMS)
-    xdg_shell.cpp          — reserved for future protocol extensions
-  input/
-    keyboard.cpp           — keyboard input + keybind dispatch
-    cursor.cpp             — reserved for cursor theme work
-  layout/
-    column_layout.cpp      — niri-style scrollable column tiling engine
-    workspace.cpp          — workspace management
-  config/
-    parser.cpp             — .nox config lexer + parser
-    config.cpp             — config loader
-```
+## Table of Contents
 
-## Building
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-### Dependencies
-
-- wlroots >= 0.18
-- wayland-server
-- xkbcommon
-- pixman
-- libinput
-- meson + ninja
+## Installation
 
 ```bash
-# Arch Linux
-sudo pacman -S wlroots wayland xkbcommon pixman libinput meson ninja
-
-# Ubuntu/Debian
-sudo apt install libwlroots-dev libwayland-dev libxkbcommon-dev \
-                 libpixman-1-dev libinput-dev meson ninja-build
+git clone https://github.com/noxwm/noctis 
+cd noctis 
+cargo build --release
 ```
 
-### Compile
+## Usage
 
 ```bash
-meson setup build
-ninja -C build
+cargo run
 ```
 
-### Run
+## Features
 
-```bash
-# From a TTY (will launch on DRM/KMS)
-./build/noxwm
+- Feature 1
+- Feature 2
+- Feature 3
 
-# From inside an existing Wayland session (for testing)
-./build/noxwm  # wlroots auto-detects and uses a nested backend
-```
+## Contributing
 
-## Config
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Copy the example config:
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-```bash
-mkdir -p ~/.config/noxwm
-cp config.nox.example ~/.config/noxwm/config.nox
-```
+## License
 
-Edit `~/.config/noxwm/config.nox`:
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-```
-general {
-    gaps = 8
-    border_width = 2
-    border_color = #cba6f7
-    border_color_inactive = #313244
-}
+## Contact
 
-keybinds {
-    Super+Return = exec kitty
-    Super+Q = close
-    Super+H = focus left
-    Super+L = focus right
-    Super+1 = workspace 1
-}
+notcandy001
 
-autostart {
-    exec waybar
-}
-```
-
-## Layout model
-
-Each workspace uses a scrollable column layout:
-
-```
-Workspace 1:  [ terminal ] [ browser ] [ editor ] →  scroll with Super+H/L
-Workspace 2:  [ discord ]  [ spotify ]
-```
-
-- Every new window opens in its own column
-- Windows in the same column stack vertically
-- Columns scroll horizontally, keeping the focused column visible
-- Switch workspaces with Super+1 through Super+9
-
-## v1 scope
-
-- [x] Tiling (scrollable columns)
-- [x] Named workspaces (9 total)
-- [x] Focus with keyboard (Super+H/L) and mouse click
-- [x] .nox config parser
-- [x] Keybind dispatch
-- [x] Autostart programs
-- [x] Close window / fullscreen
-- [ ] Border rendering (v1.1)
-- [ ] Multi-monitor (v2)
-- [ ] XWayland (v2)
-- [ ] Animations (v2)
+Project Link: [https://github.com/username/noctis](https://github.com/username/noctis)
