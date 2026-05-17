@@ -7,7 +7,6 @@ use tracing::info;
 use tracing_subscriber::EnvFilter;
 
 fn main() {
-    // Init logging — set RUST_LOG=debug for verbose output
     tracing_subscriber::fmt()
         .with_env_filter(
             EnvFilter::try_from_default_env()
@@ -15,10 +14,19 @@ fn main() {
         )
         .init();
 
-    info!("noxwm starting");
-
     let config = config::NoxConfig::load();
     info!("config loaded — gaps={} border_width={}", config.gaps, config.border_width);
 
-    core::run(config);
+    // Auto-detect: if DISPLAY or WAYLAND_DISPLAY is set, use winit (nested).
+    // Otherwise use udev backend (real TTY).
+    let is_nested = std::env::var("WAYLAND_DISPLAY").is_ok()
+        || std::env::var("DISPLAY").is_ok();
+
+    if is_nested {
+        info!("running nested (winit backend)");
+        core::winit::run(config);
+    } else {
+        info!("running on TTY (udev/DRM backend)");
+        core::udev::run(config);
+    }
 }

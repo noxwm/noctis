@@ -11,10 +11,17 @@ path = "src/main.rs"
 smithay = { version = "0.7", default-features = false, features = [
     "backend_winit",
     "backend_libinput",
+    "backend_udev",
+    "backend_drm",
+    "backend_session",
+    "backend_session_libseat",
     "renderer_gl",
     "wayland_frontend",
     "desktop",
+    "backend_gbm",
+    "use_system_lib",
 ] }
+rustix = "0.38"
 
 wayland-server   = "0.31"
 wayland-backend  = { version = "0.3", features = ["server_system"] }
